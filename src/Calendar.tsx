@@ -7,46 +7,25 @@ import { EventContentArg, EventInput } from '@fullcalendar/core';
 import { useState } from 'react';
 import list from "@fullcalendar/list"
 import { DateSelectionApi } from '@fullcalendar/core';
+import EventForm from './EventForm';
 
 const Calendar = () => {
-
-
+    //funkce otevirani modalu
     const [modalOpen, setModalOpen] = useState(false);
+    const handleModalClick = () => { setModalOpen(true); };
+    const handleSubmit = (event: EventInput) => { setModalOpen(false); };
+
+    //funkce rendrovani eventu
     const renderEventContent = (eventContent: EventContentArg) => (
         <>
-          <b>{eventContent.timeText}</b>
-          <i>{eventContent.event.title}</i>
+            <b>{eventContent.timeText}</b>
+            <i>{eventContent.event.title}</i>
         </>
-      );
-    const handleModalClick = () => { setModalOpen(true); };
-    const handleFormSubmit = (event: EventInput) => { setModalOpen(false); };
-
-
-    return (
+    );
+   return (
         <section>
             <button onClick={handleModalClick}>Add Event</button>
-            {modalOpen && (
-                <form onSubmit={handleFormSubmit}>
-                    <label>
-                        <input type="text" name="title" style={{ width: '170px' }} />
-                    </label>
-                    <br />
-                    <label>
-                        <input type="datetime-local" name="start" />
-                    </label>
-                    <br />
-                    <label>
-                        <input type="datetime-local" name="end" />
-                    </label>
-                    <br />
-                    <label>
-                        <input type="color" name="color" style={{ height: "25px", width: "170px", marginTop: "1px" }} />
-                    </label>
-                    <br />
-                    <button type="submit">Add</button>
-                </form>
-            )}
-
+            {modalOpen && <EventForm onSubmit={handleSubmit} />}
 
             <FullCalendar
                 plugins={[list, dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -67,9 +46,6 @@ const Calendar = () => {
                 selectMirror={true}
                 handleWindowResize={true}
                 eventContent={renderEventContent}
-                
-
-
             />
         </section>
     );
