@@ -1,67 +1,80 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { EventInput } from '@fullcalendar/core';
-
-const events: EventInput[] = [
-    {
-        id: '1',
-        title: 'Billish',
-        start: '2023-05-29T10:00:00',
-        end: '2023-05-31T12:00:00',
-        eventColor: 'orange'
-    },
-    {
-        id: '2',
-        title: 'B-Day Party',
-        start: '2023-05-19T10:00:00',
-        end: '2023-05-20T12:00:00',
-    },
-    {
-        id: '3',
-        title: 'LoopTroop',
-        start: '2023-06-08T10:00:00',
-        end: '2023-06-10T11:00:00',
-    },
-    { id: '4', title: 'Korolova', start: '2023-06-03', end: '2023-06-02' },
-    { id: '5', title: 'Benny Bennasi', start: '2023-06-05', end: '2023-06-06' },
-];
-
+import { EventContentArg, EventInput } from '@fullcalendar/core';
+import { useState } from 'react';
+import list from "@fullcalendar/list"
+import { DateSelectionApi } from '@fullcalendar/core';
 
 const Calendar = () => {
 
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const renderEventContent = (eventContent: EventContentArg) => (
+        <>
+          <b>{eventContent.timeText}</b>
+          <i>{eventContent.event.title}</i>
+        </>
+      );
+    const handleModalClick = () => { setModalOpen(true); };
+    const handleFormSubmit = (event: EventInput) => { setModalOpen(false); };
+
+
     return (
-        <div className="App">
+        <section>
+            <button onClick={handleModalClick}>Add Event</button>
+            {modalOpen && (
+                <form onSubmit={handleFormSubmit}>
+                    <label>
+                        <input type="text" name="title" style={{ width: '170px' }} />
+                    </label>
+                    <br />
+                    <label>
+                        <input type="datetime-local" name="start" />
+                    </label>
+                    <br />
+                    <label>
+                        <input type="datetime-local" name="end" />
+                    </label>
+                    <br />
+                    <label>
+                        <input type="color" name="color" style={{ height: "25px", width: "170px", marginTop: "1px" }} />
+                    </label>
+                    <br />
+                    <button type="submit">Add</button>
+                </form>
+            )}
+
+
             <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                plugins={[list, dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 headerToolbar={{
-                    start: "dayGridMonth, timeGridWeek",
+                    start: "dayGridMonth, timeGridWeek, listWeek",
                     center: "title",
                     end: "today prev,next",
                 }}
-                height={"90vh"}
-                events={events}
+                height={"99vh"}
                 eventColor="red"
-                nowIndicator
                 firstDay={1}
-                dayMaxEventRows={true}
+                dayMaxEventRows={false}
                 dayMaxEvents={undefined}
+                nowIndicator={true}
+                editable={true}
+                selectable={true}
+                selectMirror={true}
+                handleWindowResize={true}
                 eventContent={renderEventContent}
-              
+                
+
+
             />
-        </div>
+        </section>
     );
 };
-function renderEventContent(eventInfo: { timeText: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; event: { title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; }; }) {
-    return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
-    )
-  }
+
+
 
 export default Calendar;
