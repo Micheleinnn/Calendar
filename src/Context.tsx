@@ -1,19 +1,21 @@
+'use client'
+
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 
 interface EventData {
     title: string;
-    start: string;
+    date: string;
     end: string;
-    color: string;
+    backgroundColor: string;
 }
 
 export interface ContextType {
     calendarEvents: EventData[];
     setCalendarEvents: Dispatch<SetStateAction<EventData[]>>
-    title: string, setTitle: (data: string) => void;
-    start: string, setStart: (data: string) => void;
-    end: string, setEnd: (data: string) => void;
-    color: string, setColor: (data: string) => void;
+    title: string, setTitle: Dispatch<SetStateAction<string>>
+    start: string, setStart: Dispatch<SetStateAction<string>>
+    end: string, setEnd: Dispatch<SetStateAction<string>>
+    color: string, setColor: Dispatch<SetStateAction<string>>
 };
 
 export const EventFormContext = React.createContext<ContextType>({

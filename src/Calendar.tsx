@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -8,24 +10,32 @@ import { useState } from 'react';
 import list from "@fullcalendar/list"
 import { DateSelectionApi } from '@fullcalendar/core';
 import EventForm from './EventForm';
+import { useEventFormContext } from './Context';
 
 const Calendar = () => {
-    //funkce otevirani modalu
+    //funkce otevirani modalu(1)
     const [modalOpen, setModalOpen] = useState(false);
-    const handleModalClick = () => { setModalOpen(true); };
-    const handleSubmit = (event: EventInput) => { setModalOpen(false); };
+    //promenna z contextu(5)
+    const { calendarEvents } = useEventFormContext()
 
-    //funkce rendrovani eventu
-    const renderEventContent = (eventContent: EventContentArg) => (
-        <>
-            <b>{eventContent.timeText}</b>
-            <i>{eventContent.event.title}</i>
-        </>
-    );
-   return (
+    const handleModalClick = () => { setModalOpen(true); };
+
+    const closeModal = () => { setModalOpen(false); };
+
+    //funkce rendrovani eventu(6)
+    const renderEventContent = (eventContent: EventContentArg) => {
+        console.log(eventContent)
+        return (
+            <>
+                <p>{eventContent.event.title}</p>
+            </>
+        )
+    }
+    return (
         <section>
             <button onClick={handleModalClick}>Add Event</button>
-            {modalOpen && <EventForm onSubmit={handleSubmit} />}
+            {/*funkce zavirani modalu(2)*/}
+            {modalOpen && <EventForm closeModal={closeModal} />}
 
             <FullCalendar
                 plugins={[list, dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -46,6 +56,7 @@ const Calendar = () => {
                 selectMirror={true}
                 handleWindowResize={true}
                 eventContent={renderEventContent}
+                events={calendarEvents}
             />
         </section>
     );
