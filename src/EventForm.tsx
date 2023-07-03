@@ -31,7 +31,7 @@ const EventForm: React.FC<EventFormProps> = ({ closeModal }) => {
     return (
         <form onSubmit={handleSubmit}>
             {/*pridani inputu(3)*/}
-            <input type="text" name="title" style={{ width: '170px' }} value={title} onChange={(e) => {
+            <input type="text" name="title" style={{ width: '175px' }} value={title} onChange={(e) => {
                 console.log(e.target.value)
                 setTitle(e.target.value)
             }} />
